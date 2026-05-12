@@ -50,6 +50,8 @@ class Product {
             'image_path' => $data['image_path'],
             'status' => $data['status']
         ]);
+
+        
     }
 
     public function softDelete($id) {
@@ -66,6 +68,55 @@ class Product {
 
     public function getSuppliers() {
         return $this->db->query("SELECT * FROM suppliers WHERE deleted_at IS NULL ORDER BY name ASC")->fetchAll();
+    }
+
+    public function getProductById($id) {
+        $query = "SELECT * FROM products WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function updateProduct($id, $data) {
+        $query = "UPDATE products SET 
+                    sku = :sku, 
+                    name = :name, 
+                    category_id = :category_id, 
+                    supplier_id = :supplier_id, 
+                    description = :description, 
+                    price = :price, 
+                    stock_quantity = :stock_quantity, 
+                    min_threshold = :min_threshold, 
+                    status = :status";
+
+        // Only update image path if a new image was uploaded
+        if ($data['image_path'] !== null) {
+            $query .= ", image_path = :image_path";
+        }
+        
+        $query .= " WHERE id = :id";
+
+        $stmt = $this->db->prepare($query);
+        
+        $params = [
+            'id' => $id,
+            'sku' => $data['sku'],
+            'name' => $data['name'],
+            'category_id' => $data['category_id'],
+            'supplier_id' => $data['supplier_id'],
+            'description' => $data['description'],
+            'price' => $data['price'],
+            'stock_quantity' => $data['stock_quantity'],
+            'min_threshold' => $data['min_threshold'],
+            'status' => $data['status']
+        ];
+
+        if ($data['image_path'] !== null) {
+            $params['image_path'] = $data['image_path'];
+        }
+
+        return $stmt->execute($params);
     }
 }
 ?>
