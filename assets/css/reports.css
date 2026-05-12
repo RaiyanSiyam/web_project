@@ -1,0 +1,37 @@
+/* assets/css/reports.css */
+.reports-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px; }
+.header-actions { display: flex; gap: 12px; }
+.report-filter { padding: 8px 16px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 0.9rem; outline: none; background: white; cursor: pointer; }
+
+/* KPI Grid */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 32px; }
+.kpi-card { background: white; padding: 24px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: center; }
+.highlight-card { background: #111827; color: white; border-color: #111827; }
+.kpi-label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.highlight-card .kpi-label { color: #9ca3af; }
+.kpi-val { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; }
+
+/* Charts Layout */
+.charts-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+.chart-box { background: white; border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden; }
+.chart-header { padding: 20px 24px; border-bottom: 1px solid var(--border); }
+.chart-header h3 { font-size: 1rem; font-weight: 600; }
+.chart-body { padding: 24px; flex: 1; min-height: 350px; position: relative; }
+.doughnut-container { display: flex; justify-content: center; align-items: center; }
+
+/* Print Styles */
+@media print {
+    .sidebar, .top-navbar, .header-actions { display: none !important; }
+    .main-content { margin-left: 0; }
+    .app-layout { background: white; }
+    .chart-box { break-inside: avoid; border: 1px solid #000; }
+    .kpi-card { border: 1px solid #000; }
+    .highlight-card { background: white; color: black; }
+    .highlight-card .kpi-label { color: black; }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .charts-layout { grid-template-columns: 1fr; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+}
