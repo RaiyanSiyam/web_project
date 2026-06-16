@@ -10,18 +10,11 @@ class User {
     }
 
     public function findByEmail($email) {
-        // Only fetch active users who haven't been soft-deleted
-        $query = "SELECT u.*, r.role_name 
-                  FROM users u 
-                  JOIN roles r ON u.role_id = r.id 
-                  WHERE u.email = :email 
-                  AND u.status = 'active' 
-                  AND u.deleted_at IS NULL 
-                  LIMIT 1";
-                  
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
+        $db = Database::getInstance();
+        
+        // Fetch directly from users table and ignore the old roles table completely
+        $stmt = $db->prepare("SELECT *, role AS role_name FROM users WHERE email = :email AND deleted_at IS NULL");
+        $stmt->execute(['email' => $email]);
         
         return $stmt->fetch();
     }
