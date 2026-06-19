@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 12, 2026 at 11:45 PM
+-- Generation Time: Jun 19, 2026 at 12:15 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49,6 +49,13 @@ CREATE TABLE `categories` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`id`, `name`, `description`, `created_at`) VALUES
+(1, 'Groceries', 'Daily grocery items', '2026-05-12 22:11:21');
+
 -- --------------------------------------------------------
 
 --
@@ -71,6 +78,16 @@ CREATE TABLE `invoices` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `invoices`
+--
+
+INSERT INTO `invoices` (`id`, `invoice_number`, `customer_name`, `customer_phone`, `subtotal`, `vat_amount`, `discount_amount`, `grand_total`, `amount_paid`, `change_return`, `payment_status`, `created_by`, `created_at`) VALUES
+(4, 'INV-20260513-3947', 'Siyam', '+8801844265316', 49.00, 1.95, 10.00, 40.95, 501.00, 460.05, 'paid', 1, '2026-05-12 22:56:53'),
+(5, 'INV-20260513-5524', 'Atosi', '+8801961816171', 98.00, 4.40, 10.00, 92.40, 500.00, 407.60, 'paid', 1, '2026-05-12 23:04:44'),
+(6, 'INV-20260513-7086', '', '', 4704.00, 235.20, 0.00, 4939.20, 5000.00, 60.80, 'paid', 1, '2026-05-12 23:26:47'),
+(7, 'INV-20260513-7927', 'Atosi', '+8801961816171', 1372.00, 63.60, 100.00, 1335.60, 1500.00, 164.40, 'paid', 1, '2026-05-12 23:34:22');
+
 -- --------------------------------------------------------
 
 --
@@ -85,6 +102,16 @@ CREATE TABLE `invoice_items` (
   `unit_price` decimal(10,2) NOT NULL,
   `total_price` decimal(12,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `invoice_items`
+--
+
+INSERT INTO `invoice_items` (`id`, `invoice_id`, `product_id`, `quantity`, `unit_price`, `total_price`) VALUES
+(4, 4, 1, 1, 49.00, 49.00),
+(5, 5, 1, 2, 49.00, 98.00),
+(6, 6, 1, 96, 49.00, 4704.00),
+(7, 7, 1, 28, 49.00, 1372.00);
 
 -- --------------------------------------------------------
 
@@ -121,8 +148,17 @@ CREATE TABLE `products` (
   `image_path` varchar(255) DEFAULT NULL,
   `status` enum('active','discontinued') DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `products`
+--
+
+INSERT INTO `products` (`id`, `sku`, `name`, `category_id`, `supplier_id`, `description`, `price`, `stock_quantity`, `min_threshold`, `image_path`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'foa1', 'Fresh Organic Apples', 1, 1, '', 49.00, 33, 10, 'assets/images/products/prod_6a03a62418246.webp', 'active', '2026-05-12 22:13:56', '2026-05-12 23:35:20', NULL),
+(2, 'dassd', 'dasd', 1, 1, '', 1112.00, 1212, 1012, NULL, 'discontinued', '2026-05-12 22:30:34', '2026-05-12 22:30:39', '2026-05-12 22:30:39');
 
 -- --------------------------------------------------------
 
@@ -141,6 +177,14 @@ CREATE TABLE `reorder_requests` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `reorder_requests`
+--
+
+INSERT INTO `reorder_requests` (`id`, `reorder_number`, `product_id`, `supplier_id`, `requested_qty`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'PO-260513-7243', 1, 1, 30, 'received', '2026-05-12 23:26:57', '2026-05-12 23:27:22'),
+(2, 'PO-260513-7870', 1, 1, 30, 'received', '2026-05-12 23:34:59', '2026-05-12 23:35:20');
+
 -- --------------------------------------------------------
 
 --
@@ -158,7 +202,7 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `role_name`, `created_at`) VALUES
-(1, 'Admin', '2026-05-12 21:43:38');
+(1, 'admin', '2026-05-12 21:43:38');
 
 -- --------------------------------------------------------
 
@@ -174,8 +218,16 @@ CREATE TABLE `suppliers` (
   `phone` varchar(20) NOT NULL,
   `address` text DEFAULT NULL,
   `rating` decimal(3,2) DEFAULT 0.00,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `suppliers`
+--
+
+INSERT INTO `suppliers` (`id`, `name`, `contact_person`, `email`, `phone`, `address`, `rating`, `created_at`, `deleted_at`) VALUES
+(1, 'ABC Suppliers', NULL, NULL, '01700000000', NULL, 0.00, '2026-05-12 22:11:21', NULL);
 
 -- --------------------------------------------------------
 
@@ -192,15 +244,22 @@ CREATE TABLE `users` (
   `password_hash` varchar(255) NOT NULL,
   `status` enum('active','inactive') DEFAULT 'active',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  `role` enum('admin','manager','cashier') NOT NULL DEFAULT 'cashier',
+  `last_activity` datetime DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `salary` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `role_id`, `first_name`, `last_name`, `email`, `password_hash`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 'System', 'Administrator', 'admin@uiumart.com', '$2y$10$vEUYPcb66xwTKWES5R6y1O88.Gtgp0/SqdEAGISv0cpq.RhAyx8O6', 'active', '2026-05-12 21:43:38', '2026-05-12 21:43:38');
+INSERT INTO `users` (`id`, `role_id`, `first_name`, `last_name`, `email`, `password_hash`, `status`, `created_at`, `updated_at`, `deleted_at`, `role`, `last_activity`, `phone`, `salary`) VALUES
+(1, 1, 'System', 'Administrator', 'admin@uiumart.com', '$2y$10$vEUYPcb66xwTKWES5R6y1O88.Gtgp0/SqdEAGISv0cpq.RhAyx8O6', 'active', '2026-05-12 21:43:38', '2026-06-16 16:37:20', NULL, 'admin', '2026-06-16 22:37:20', NULL, NULL),
+(10, 3, 'Tamjid', 'Islam', 'tamjid@gmail.com', '$2y$10$zYk0XPuqEBvSXI4x8mhxte2kYn9KnQhz2ncuTF/iZn5Y6xQGZ1NZS', 'active', '2026-06-16 15:38:32', '2026-06-16 16:35:15', NULL, 'cashier', '2026-06-16 22:35:15', '01713333351', 50000.00),
+(12, 2, 'Raiyan', 'Islam', 'raiyansiyam07@gmail.com', '$2y$10$DYOo.bVtlAkqzlkuEKbj3ejo.fgP.167jKiMXlKB5ea6IXyyBTF5y', 'active', '2026-06-16 16:37:07', '2026-06-16 16:37:07', NULL, 'manager', NULL, '01713333351', 50000.00);
 
 --
 -- Indexes for dumped tables
@@ -299,19 +358,19 @@ ALTER TABLE `activity_logs`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `invoice_items`
 --
 ALTER TABLE `invoice_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -323,13 +382,13 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `reorder_requests`
 --
 ALTER TABLE `reorder_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -341,13 +400,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `suppliers`
 --
 ALTER TABLE `suppliers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -391,12 +450,6 @@ ALTER TABLE `products`
 ALTER TABLE `reorder_requests`
   ADD CONSTRAINT `reorder_requests_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `reorder_requests_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
