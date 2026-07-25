@@ -253,5 +253,4 @@ SELECT COUNT(*) FROM users WHERE role = 'cashier' AND last_activity > DATE_SUB(N
 ## License
 
 MIT License
-```
 
