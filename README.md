@@ -1,6 +1,3 @@
-You're right — you want the **raw markdown source** as plain text (with the literal `#`, `|`, `**`, `-` characters visible), not a rendered file. Here's the converted content as raw code you can copy directly:
-
-```markdown
 # UIU Mart — Enterprise Retail Management System
 
 A production-style retail and point-of-sale management system built with native Object-Oriented PHP and a custom MVC architecture. This system allows organizations to securely manage employees, roles, inventory, and storefront POS operations efficiently.
